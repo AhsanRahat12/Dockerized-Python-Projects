@@ -20,9 +20,14 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
 
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.settings.screen_width = self.screen.get_rect().width
-        self.settings.screen_height = self.screen.get_rect().height
+        # Set display mode based on settings
+        if self.settings.fullscreen:
+            self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+            self.settings.screen_width = self.screen.get_rect().width
+            self.settings.screen_height = self.screen.get_rect().height
+        else:
+            self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        
         pygame.display.set_caption("Alien Invasion")
 
         # Create an instance to store game statistics,
@@ -55,7 +60,7 @@ class AlienInvasion:
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit()
+                self._exit_game()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
@@ -63,6 +68,13 @@ class AlienInvasion:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
+
+    
+    def _exit_game(self):
+        """Save data and exit the game."""
+        self.stats.save_high_score()
+        sys.exit()
+
 
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
@@ -96,7 +108,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
-            sys.exit()
+            self._exit_game()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
 

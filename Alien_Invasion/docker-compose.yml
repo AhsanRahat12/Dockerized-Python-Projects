@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  alien-invasion:
+    build: .
+    container_name: alien-invasion-game
+    environment:
+      - DISPLAY=${DISPLAY}
+      - FULLSCREEN=true
+      - HIGH_SCORE_FILE=/app/data/high_score.json
+    volumes:
+      # Mount X11 socket for graphics
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Persist high scores
+      - ./data:/app/data
+    network_mode: host
+    stdin_open: true
+    tty: true

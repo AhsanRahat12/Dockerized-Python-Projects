@@ -73,6 +73,8 @@ class Scoreboard:
         if self.stats.score > self.stats.high_score:
             self.stats.high_score = self.stats.score
             self.prep_high_score()
+            # Save the new high score to file
+            self.stats.save_high_score()
 
     def show_score(self):
         """Draw scores, level, and ships to the screen."""

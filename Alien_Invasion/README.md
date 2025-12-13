@@ -128,6 +128,36 @@ volumes:
 
 Data survives container restarts and rebuilds.
 
+## 🔒 Security Considerations
+
+### Running as Root
+
+This container currently runs as root for simplicity and to avoid X11 permission issues with the display. 
+
+**Why this is acceptable for this project:**
+- Local-only execution (not exposed to internet)
+- No sensitive data processing
+- Educational/portfolio project
+- Simplified X11 display access
+
+**For production deployments**, consider:
+- Running as non-root user
+- Implementing proper user permissions
+- Using security scanning tools
+- Following Docker security best practices
+
+### Production Hardening
+
+If deploying this as a web service or multi-user environment, implement:
+```dockerfile
+# Create non-root user
+RUN useradd -m -u 1000 gameuser && \
+    chown -R gameuser:gameuser /app
+
+# Switch to non-root
+USER gameuser
+```
+
 ## 🔧 Development
 
 ### Modifying the Game
